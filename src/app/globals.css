@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
+  --background: #f5f7ff;
   --foreground: #0f172a;
 }
 
@@ -15,6 +15,22 @@
 
 body {
   font-family: var(--font-sans);
+}
+
+/* Subtle radial gradient wash behind the app. */
+.app-bg {
+  background-color: #f5f7ff;
+  background-image:
+    radial-gradient(
+      1200px 600px at 100% -10%,
+      rgba(99, 102, 241, 0.12),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at -10% 100%,
+      rgba(16, 185, 129, 0.12),
+      transparent 60%
+    );
 }
 
 /* Reusable form input styling. */
@@ -39,39 +55,4 @@ body {
 
 .input::placeholder {
   color: #94a3b8; /* slate-400 */
-}
-
-/* ==========================================================================
-   Print scoping for the Parent Report Generator.
-   On screen the report is just another card; when printing we hide the rest
-   of the page and surface only the `.report-document` element.
-   ========================================================================== */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-
-  .report-document,
-  .report-document * {
-    visibility: visible;
-  }
-
-  .report-document {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-    border: none;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-
-  @page {
-    margin: 1.5cm;
-  }
 }

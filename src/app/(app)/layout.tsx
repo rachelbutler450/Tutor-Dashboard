@@ -24,36 +24,46 @@ export default async function AppLayout({
     .eq("id", user.id)
     .maybeSingle<Profile>();
 
-  const displayName = profile?.full_name || profile?.email || user.email || "Tutor";
+  const displayName =
+    profile?.full_name || profile?.email || user.email || "Tutor";
+  const initial = displayName.trim().charAt(0).toUpperCase() || "T";
 
   return (
     <div className="flex min-h-full flex-col">
-      <header className="no-print border-b border-slate-200 bg-white">
+      <header className="sticky top-0 z-20 border-b border-slate-200/70 bg-white/80 backdrop-blur">
         <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-6">
             <Link
               href="/dashboard"
-              className="text-base font-semibold text-slate-900"
+              className="flex items-center gap-2 text-base font-semibold"
             >
-              Tutor Dashboard
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-sm font-bold text-white shadow-sm">
+                T
+              </span>
+              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+                Tutor Dashboard
+              </span>
             </Link>
-            <div className="hidden items-center gap-4 text-sm sm:flex">
+            <div className="hidden items-center gap-1 text-sm sm:flex">
               <Link
                 href="/dashboard"
-                className="text-slate-600 transition hover:text-slate-900"
+                className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-700"
               >
                 Home
               </Link>
               <Link
                 href="/students/new"
-                className="text-slate-600 transition hover:text-slate-900"
+                className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-700"
               >
                 Add student
               </Link>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-slate-500 sm:inline">
+            <span className="hidden items-center gap-2 text-sm text-slate-600 sm:inline-flex">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-xs font-semibold text-white">
+                {initial}
+              </span>
               {displayName}
             </span>
             <form action={signOut}>
