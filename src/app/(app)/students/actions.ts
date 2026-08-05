@@ -3,12 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import {
-  REVIEW_STATUSES,
-  SESSION_PERFORMANCES,
-  type ReviewStatus,
-  type SessionPerformance,
-} from "@/lib/types";
+import { REVIEW_STATUSES, type ReviewStatus } from "@/lib/types";
 
 export interface FormState {
   error?: string;
@@ -158,66 +153,3 @@ export async function deleteStudent(formData: FormData) {
   redirect("/dashboard");
 }
 
-export async function createSessionLog(
-  _prevState: FormState,
-  formData: FormData,
-): Promise<FormState> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const student_id = text(formData, "student_id");
-  const topic_name = text(formData, "topic_name");
-  if (!student_id) return { error: "Missing student id." };
-  if (!topic_name) return { error: "Topic is required." };
-
-  const perfRaw = String(formData.get("performance") ?? "Needs Review");
-  const performance: SessionPerformance = SESSION_PERFORMANCES.includes(
-    perfRaw as SessionPerformance,
-  )
-    ? (perfRaw as SessionPerformance)
-    : "Needs Review";
-
-  const session_date =
-    text(formData, "session_date") ?? new Date().toISOString().slice(0, 10);
-
-  const { error } = await supabase.from("session_logs").insert({
-    student_id,
-    tutor_id: user.id,
-    topic_name,
-    performance,
-    tutor_notes: text(formData, "tutor_notes"),
-    session_date,
-  });
-
-  if (error) {
-    return { error: error.message };
-  }
-
-  revalidatePath("/dashboard");
-  revalidatePath(`/students/${student_id}`);
-  return { success: true };
-}
-
-export async function deleteSessionLog(formData: FormData) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const id = text(formData, "id");
-  const student_id = text(formData, "student_id");
-  if (!id) return;
-
-  await supabase
-    .from("session_logs")
-    .delete()
-    .eq("id", id)
-    .eq("tutor_id", user.id);
-
-  revalidatePath("/dashboard");
-  if (student_id) revalidatePath(`/students/${student_id}`);
-}

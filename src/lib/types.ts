@@ -1,16 +1,9 @@
 export type ReviewStatus = "Not Asked" | "Asked" | "Reviewed";
-export type SessionPerformance = "Mastered" | "Needs Review" | "Struggled";
 
 export const REVIEW_STATUSES: ReviewStatus[] = [
   "Not Asked",
   "Asked",
   "Reviewed",
-];
-
-export const SESSION_PERFORMANCES: SessionPerformance[] = [
-  "Mastered",
-  "Needs Review",
-  "Struggled",
 ];
 
 export interface Profile {
@@ -35,15 +28,4 @@ export interface Student {
   review_status: ReviewStatus;
   created_at: string;
   updated_at: string;
-}
-
-export interface SessionLog {
-  id: string;
-  student_id: string;
-  tutor_id: string;
-  topic_name: string;
-  performance: SessionPerformance;
-  tutor_notes: string | null;
-  session_date: string;
-  created_at: string;
 }

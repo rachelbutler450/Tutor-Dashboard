@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f7ff;
+  --background: #fbfaff;
   --foreground: #0f172a;
 }
 
@@ -13,24 +13,29 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
+/* Soft radial gradient wash — violet / indigo / pink over a light base,
+   fixed-attached so it stays put as content scrolls. */
 body {
   font-family: var(--font-sans);
-}
-
-/* Subtle radial gradient wash behind the app. */
-.app-bg {
-  background-color: #f5f7ff;
+  min-height: 100vh;
+  background-color: #fbfaff;
   background-image:
     radial-gradient(
-      1200px 600px at 100% -10%,
-      rgba(99, 102, 241, 0.12),
+      1200px 700px at 100% -20%,
+      rgba(139, 92, 246, 0.22),
       transparent 60%
     ),
     radial-gradient(
-      900px 500px at -10% 100%,
-      rgba(16, 185, 129, 0.12),
+      1000px 600px at -10% 15%,
+      rgba(99, 102, 241, 0.18),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 700px at 50% 110%,
+      rgba(236, 72, 153, 0.15),
       transparent 60%
     );
+  background-attachment: fixed;
 }
 
 /* Reusable form input styling. */
@@ -38,21 +43,99 @@ body {
   display: block;
   width: 100%;
   border-radius: 0.5rem;
-  border: 1px solid #cbd5e1; /* slate-300 */
+  border: 1px solid #cbd5e1;
   background-color: #ffffff;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  color: #0f172a; /* slate-900 */
+  color: #0f172a;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .input:focus {
-  border-color: #6366f1; /* indigo-500 */
-  box-shadow: 0 0 0 1px #6366f1;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 1px #7c3aed;
 }
 
 .input::placeholder {
-  color: #94a3b8; /* slate-400 */
+  color: #94a3b8;
+}
+
+/* Gradient primary button used for Sign in, Create account, Add student,
+   Save changes, Mark {next}, etc. */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border-radius: 0.5rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-image: linear-gradient(
+    to right,
+    #4f46e5 0%,
+    #7c3aed 50%,
+    #ec4899 100%
+  );
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.08),
+    0 4px 12px -4px rgba(124, 58, 237, 0.4);
+  transition: filter 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Same visual language as .btn-primary, sized for tight rows. */
+.btn-primary-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-image: linear-gradient(
+    to right,
+    #4f46e5 0%,
+    #7c3aed 50%,
+    #ec4899 100%
+  );
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.08);
+  transition: filter 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary-sm:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+/* Reusable gradient page-title text. Pair with a text-size utility. */
+.gradient-title {
+  background-image: linear-gradient(
+    to right,
+    #4f46e5 0%,
+    #7c3aed 50%,
+    #ec4899 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }

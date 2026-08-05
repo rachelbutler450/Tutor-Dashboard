@@ -25,15 +25,15 @@ export default function LoginPage() {
     <main className="flex flex-1 items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Tutor Dashboard
+          <h1 className="text-4xl font-bold tracking-tight">
+            <span className="gradient-title">Tutor Dashboard</span>
           </h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Manage your students, sessions, and Preply reviews.
+          <p className="mt-2 text-sm text-slate-600">
+            Manage your students, Preply reviews, and monthly income.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-white/60 bg-white/80 p-6 shadow-xl shadow-violet-500/10 backdrop-blur">
           <div className="mb-6 grid grid-cols-2 gap-1 rounded-lg bg-slate-100 p-1">
             <button
               type="button"
@@ -98,7 +98,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loginPending}
-                className="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-60"
+                className="btn-primary w-full"
               >
                 {loginPending ? "Signing in…" : "Sign in"}
               </button>
@@ -159,7 +159,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={signupPending}
-                className="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-60"
+                className="btn-primary w-full"
               >
                 {signupPending ? "Creating account…" : "Create account"}
               </button>

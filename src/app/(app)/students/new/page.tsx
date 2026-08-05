@@ -12,18 +12,16 @@ export default function NewStudentPage() {
         >
           ← Back to dashboard
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold">
-          <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
-            Add student
-          </span>
+        <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
+          <span className="gradient-title">Add student</span>
         </h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-slate-600">
           Set up their plan, contact info, and Preply link.
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="h-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500" />
+      <div className="overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur">
+        <div className="h-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-pink-500" />
         <div className="p-6">
           <StudentForm action={createStudent} submitLabel="Add student" />
         </div>
