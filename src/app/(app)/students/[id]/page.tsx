@@ -55,7 +55,7 @@ export default async function StudentDetailPage({
           >
             ← Back to dashboard
           </Link>
-          <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
             <span className="gradient-title">{student.name}</span>
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-600">
@@ -74,44 +74,44 @@ export default async function StudentDetailPage({
           <input type="hidden" name="id" value={student.id} />
           <button
             type="submit"
-            className="rounded-lg border border-red-200 bg-white/70 px-3 py-1.5 text-sm font-medium text-red-600 backdrop-blur transition hover:bg-red-50"
+            className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
           >
             Delete student
           </button>
         </form>
       </div>
 
-      {/* Estimated Monthly Income hero for this student */}
-      <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-violet-600 to-pink-500 p-6 text-white shadow-xl shadow-violet-500/25 sm:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4">
+      {/* Estimated Monthly Income — emerald, distinct */}
+      <section className="overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50/60 shadow-sm">
+        <div className="flex items-center gap-4 border-b border-emerald-100 px-6 py-5">
+          <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+            <DollarIcon />
+          </span>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/75">
+            <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
               Estimated Monthly Income · {student.name}
             </p>
-            <p className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
+            <p className="mt-0.5 text-3xl font-bold tracking-tight text-emerald-950 sm:text-4xl">
               {formatCurrency(income.monthlyNet)}
             </p>
-            <p className="mt-1 text-sm text-white/85">
+            <p className="mt-1 text-xs text-emerald-800/80">
               {formatHourlyFee(student.hourly_fee)} ·{" "}
               {student.lessons_per_week} lesson
               {student.lessons_per_week === 1 ? "" : "s"} / week
             </p>
           </div>
-          <div className="hidden rounded-2xl bg-white/15 p-3 ring-1 ring-inset ring-white/25 backdrop-blur sm:block">
-            <DollarIcon />
-          </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <BreakdownStat
+        <div className="grid grid-cols-1 gap-3 p-6 sm:grid-cols-3">
+          <IncomeStat
             label="Gross"
             value={formatCurrencyPrecise(income.monthlyGross)}
           />
-          <BreakdownStat
+          <IncomeStat
             label={`Preply cut (${commissionPct}%)`}
             value={`- ${formatCurrencyPrecise(income.commission)}`}
           />
-          <BreakdownStat
+          <IncomeStat
             label={`Your take-home (${takeHomePct}%)`}
             value={formatCurrencyPrecise(income.monthlyNet)}
             highlight
@@ -120,8 +120,8 @@ export default async function StudentDetailPage({
       </section>
 
       {/* Editable details */}
-      <section className="overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur">
-        <div className="border-b border-slate-100 bg-gradient-to-r from-violet-50 via-indigo-50 to-white px-6 py-4">
+      <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="border-b border-slate-100 px-6 py-4">
           <h2 className="text-lg font-semibold text-slate-900">
             Student details
           </h2>
@@ -141,7 +141,7 @@ export default async function StudentDetailPage({
   );
 }
 
-function BreakdownStat({
+function IncomeStat({
   label,
   value,
   highlight = false,
@@ -152,16 +152,24 @@ function BreakdownStat({
 }) {
   return (
     <div
-      className={`rounded-xl p-4 ring-1 ring-inset backdrop-blur ${
+      className={
         highlight
-          ? "bg-white/25 ring-white/40"
-          : "bg-white/10 ring-white/20"
-      }`}
+          ? "rounded-xl bg-emerald-600 p-4 text-white shadow-sm"
+          : "rounded-xl border border-emerald-100 bg-white p-4"
+      }
     >
-      <div className="text-xs font-semibold uppercase tracking-wide text-white/75">
+      <div
+        className={`text-xs font-semibold uppercase tracking-wide ${
+          highlight ? "text-emerald-50" : "text-emerald-700"
+        }`}
+      >
         {label}
       </div>
-      <div className="mt-1 text-2xl font-bold tabular-nums text-white">
+      <div
+        className={`mt-1 text-2xl font-bold tabular-nums ${
+          highlight ? "text-white" : "text-slate-900"
+        }`}
+      >
         {value}
       </div>
     </div>
@@ -171,7 +179,7 @@ function BreakdownStat({
 function DollarIcon() {
   return (
     <svg
-      className="h-6 w-6"
+      className="h-5 w-5"
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth={1.75}

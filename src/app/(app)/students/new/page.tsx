@@ -12,7 +12,7 @@ export default function NewStudentPage() {
         >
           ← Back to dashboard
         </Link>
-        <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
+        <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
           <span className="gradient-title">Add student</span>
         </h1>
         <p className="mt-1 text-sm text-slate-600">
@@ -20,8 +20,7 @@ export default function NewStudentPage() {
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-white/60 bg-white/80 shadow-sm backdrop-blur">
-        <div className="h-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-pink-500" />
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="p-6">
           <StudentForm action={createStudent} submitLabel="Add student" />
         </div>

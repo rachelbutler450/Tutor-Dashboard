@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fbfaff;
+  --background: #f8fafc;
   --foreground: #0f172a;
 }
 
@@ -13,27 +13,22 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Soft radial gradient wash — violet / indigo / pink over a light base,
-   fixed-attached so it stays put as content scrolls. */
+/* Barely-there tinted wash — premium & light. Fixed so it stays as
+   content scrolls. */
 body {
   font-family: var(--font-sans);
   min-height: 100vh;
-  background-color: #fbfaff;
+  background-color: #f8fafc;
   background-image:
     radial-gradient(
-      1200px 700px at 100% -20%,
-      rgba(139, 92, 246, 0.22),
-      transparent 60%
+      1100px 500px at 100% -10%,
+      rgba(99, 102, 241, 0.06),
+      transparent 55%
     ),
     radial-gradient(
-      1000px 600px at -10% 15%,
-      rgba(99, 102, 241, 0.18),
-      transparent 60%
-    ),
-    radial-gradient(
-      900px 700px at 50% 110%,
-      rgba(236, 72, 153, 0.15),
-      transparent 60%
+      900px 500px at -5% 20%,
+      rgba(16, 185, 129, 0.05),
+      transparent 55%
     );
   background-attachment: fixed;
 }
@@ -43,9 +38,9 @@ body {
   display: block;
   width: 100%;
   border-radius: 0.5rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #e2e8f0;
   background-color: #ffffff;
-  padding: 0.5rem 0.75rem;
+  padding: 0.55rem 0.8rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: #0f172a;
@@ -54,16 +49,16 @@ body {
 }
 
 .input:focus {
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 1px #7c3aed;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
 .input::placeholder {
   color: #94a3b8;
 }
 
-/* Gradient primary button used for Sign in, Create account, Add student,
-   Save changes, Mark {next}, etc. */
+/* Solid, restrained primary button — Sign in, Create account,
+   Add student, Save changes, Mark {next}, etc. */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -74,21 +69,16 @@ body {
   font-size: 0.875rem;
   font-weight: 600;
   color: #ffffff;
-  background-image: linear-gradient(
-    to right,
-    #4f46e5 0%,
-    #7c3aed 50%,
-    #ec4899 100%
-  );
-  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.08),
-    0 4px 12px -4px rgba(124, 58, 237, 0.4);
-  transition: filter 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+  background-color: #4f46e5; /* indigo-600 */
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.08);
+  transition: background-color 0.15s ease, transform 0.15s ease,
+    opacity 0.15s ease;
   border: none;
   cursor: pointer;
 }
 
 .btn-primary:hover:not(:disabled) {
-  filter: brightness(1.08);
+  background-color: #4338ca; /* indigo-700 */
 }
 
 .btn-primary:active:not(:disabled) {
@@ -96,11 +86,11 @@ body {
 }
 
 .btn-primary:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-/* Same visual language as .btn-primary, sized for tight rows. */
+/* Small variant sized for tight rows. */
 .btn-primary-sm {
   display: inline-flex;
   align-items: center;
@@ -110,29 +100,44 @@ body {
   font-size: 0.75rem;
   font-weight: 600;
   color: #ffffff;
-  background-image: linear-gradient(
-    to right,
-    #4f46e5 0%,
-    #7c3aed 50%,
-    #ec4899 100%
-  );
-  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.08);
-  transition: filter 0.15s ease;
+  background-color: #4f46e5;
+  transition: background-color 0.15s ease;
   border: none;
   cursor: pointer;
 }
 
 .btn-primary-sm:hover:not(:disabled) {
-  filter: brightness(1.08);
+  background-color: #4338ca;
 }
 
-/* Reusable gradient page-title text. Pair with a text-size utility. */
+/* Amber variant used inside the Preply review section. */
+.btn-amber-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #d97706; /* amber-600 */
+  transition: background-color 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-amber-sm:hover:not(:disabled) {
+  background-color: #b45309; /* amber-700 */
+}
+
+/* Restrained gradient page title — indigo→violet→slate rather than the
+   candy indigo→pink of before. Pair with a text-size utility. */
 .gradient-title {
   background-image: linear-gradient(
     to right,
-    #4f46e5 0%,
-    #7c3aed 50%,
-    #ec4899 100%
+    #4338ca 0%,
+    #7c3aed 55%,
+    #1e293b 100%
   );
   background-clip: text;
   -webkit-background-clip: text;
