@@ -20,9 +20,9 @@ const NEXT_STATUS: Record<ReviewStatus, ReviewStatus | null> = {
 };
 
 const REVIEW_TONE: Record<ReviewStatus, string> = {
-  "Not Asked": "from-slate-400 to-slate-500",
-  Asked: "from-amber-400 to-orange-500",
-  Reviewed: "from-emerald-400 to-teal-500",
+  "Not Asked": "bg-slate-100 text-slate-700",
+  Asked: "bg-amber-100 text-amber-800",
+  Reviewed: "bg-emerald-100 text-emerald-800",
 };
 
 function parseStatusFilter(raw: string | undefined): ReviewStatus | null {
@@ -86,47 +86,54 @@ export default async function DashboardPage({
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
-          Dashboard
-        </h1>
+        <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
         <p className="mt-1 text-sm text-slate-500">
-          Follow-ups, weekly load, and your projected monthly income at a glance.
+          Everything about your tutoring business in one place — click a
+          summary card below to jump straight to the details.
         </p>
       </div>
 
-      {/* ---- KPI strip ---- */}
+      {/* ---- KPI strip: each card is a same-page jump to its section ---- */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
+          href="#roster"
           label="Active students"
           value={String(students.length)}
-          tone="from-sky-500 to-blue-600"
+          tone="text-sky-700"
+          chip="bg-sky-50"
           icon={
             <path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
           }
         />
         <KpiCard
+          href="#roster"
           label="Weekly lessons"
           value={String(totalLessonsPerWeek)}
           sub="across your roster"
-          tone="from-violet-500 to-fuchsia-600"
+          tone="text-violet-700"
+          chip="bg-violet-50"
           icon={
             <path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
           }
         />
         <KpiCard
+          href="#income"
           label="Est. monthly gross"
           value={formatCurrency(income.monthlyGross)}
           sub="before Preply commission"
-          tone="from-emerald-500 to-teal-600"
+          tone="text-emerald-700"
+          chip="bg-emerald-50"
           icon={
             <path d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
           }
         />
         <KpiCard
+          href="#income"
           label="Your take-home"
           value={formatCurrency(income.monthlyNet)}
           sub={`after ${commissionPct}% commission`}
-          tone="from-pink-500 via-rose-500 to-orange-500"
+          tone="text-rose-700"
+          chip="bg-rose-50"
           icon={
             <path d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
           }
@@ -134,124 +141,125 @@ export default async function DashboardPage({
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* ---- Estimated Monthly Income (hero, spans 2 cols) ---- */}
-        <section className="lg:col-span-2 relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-6 text-white shadow-xl">
-          <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-pink-400/20 blur-3xl" />
-
-          <div className="relative">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold">Estimated Monthly Income</h2>
-                <p className="mt-1 text-sm text-white/70">
-                  Assumes every planned lesson happens (~4.33 weeks / month).
-                </p>
-              </div>
-              <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 ring-1 ring-inset ring-white/25">
-                Preply {commissionPct}% commission
-              </span>
+        {/* ---- Estimated Monthly Income ---- */}
+        <section
+          id="income"
+          className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">
+                Estimated Monthly Income
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Assumes every planned lesson happens (~4.33 weeks / month).
+              </p>
             </div>
-
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <IncomeStat
-                label="Gross"
-                value={formatCurrencyPrecise(income.monthlyGross)}
-                caption="Before commission"
-                emphasis="soft"
-              />
-              <IncomeStat
-                label={`Preply cut (${commissionPct}%)`}
-                value={`−${formatCurrencyPrecise(income.commission)}`}
-                caption="Deducted"
-                emphasis="soft"
-              />
-              <IncomeStat
-                label={`Your take-home (${takeHomePct}%)`}
-                value={formatCurrencyPrecise(income.monthlyNet)}
-                caption="What you receive"
-                emphasis="strong"
-              />
-            </div>
-
-            {/* Visual gross → net bar */}
-            <div className="mt-6">
-              <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/15">
-                <div
-                  className="bg-gradient-to-r from-emerald-300 to-emerald-400"
-                  style={{ width: `${takeHomePct}%` }}
-                  title={`Take-home ${takeHomePct}%`}
-                />
-                <div
-                  className="bg-gradient-to-r from-rose-300 to-rose-400"
-                  style={{ width: `${commissionPct}%` }}
-                  title={`Preply commission ${commissionPct}%`}
-                />
-              </div>
-              <div className="mt-1 flex justify-between text-xs text-white/70">
-                <span>Your {takeHomePct}%</span>
-                <span>Preply {commissionPct}%</span>
-              </div>
-            </div>
-
-            {students.length > 0 && (
-              <div className="mt-6 overflow-hidden rounded-xl bg-white/10 ring-1 ring-inset ring-white/15">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="text-left text-xs uppercase tracking-wide text-white/60">
-                      <th className="px-4 py-2 font-medium">Student</th>
-                      <th className="px-4 py-2 font-medium">Rate</th>
-                      <th className="px-4 py-2 font-medium">Lessons/wk</th>
-                      <th className="px-4 py-2 text-right font-medium">
-                        Monthly take-home
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10">
-                    {students.map((student) => {
-                      const bd = calculateStudentIncome(
-                        student.hourly_fee,
-                        student.lessons_per_week,
-                      );
-                      return (
-                        <tr key={student.id} className="hover:bg-white/5">
-                          <td className="px-4 py-2 font-medium">
-                            <Link
-                              href={`/students/${student.id}`}
-                              className="hover:underline"
-                            >
-                              {student.name}
-                            </Link>
-                          </td>
-                          <td className="px-4 py-2 tabular-nums text-white/80">
-                            {formatHourlyFee(student.hourly_fee)}
-                          </td>
-                          <td className="px-4 py-2 tabular-nums text-white/80">
-                            {student.lessons_per_week}
-                          </td>
-                          <td className="px-4 py-2 text-right tabular-nums font-semibold">
-                            {formatCurrencyPrecise(bd.monthlyNet)}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+              Preply {commissionPct}% commission
+            </span>
           </div>
+
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <IncomeStat
+              label="Gross"
+              value={formatCurrencyPrecise(income.monthlyGross)}
+              caption="Before commission"
+              tone="bg-slate-50 text-slate-900"
+            />
+            <IncomeStat
+              label={`Preply cut (${commissionPct}%)`}
+              value={`−${formatCurrencyPrecise(income.commission)}`}
+              caption="Deducted"
+              tone="bg-rose-50 text-rose-700"
+            />
+            <IncomeStat
+              label={`Your take-home (${takeHomePct}%)`}
+              value={formatCurrencyPrecise(income.monthlyNet)}
+              caption="What you receive"
+              tone="bg-emerald-50 text-emerald-700"
+            />
+          </div>
+
+          {/* Visual gross → net bar */}
+          <div className="mt-5">
+            <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
+              <div
+                className="bg-emerald-400"
+                style={{ width: `${takeHomePct}%` }}
+                title={`Take-home ${takeHomePct}%`}
+              />
+              <div
+                className="bg-rose-300"
+                style={{ width: `${commissionPct}%` }}
+                title={`Preply commission ${commissionPct}%`}
+              />
+            </div>
+            <div className="mt-1 flex justify-between text-xs text-slate-500">
+              <span>Your {takeHomePct}%</span>
+              <span>Preply {commissionPct}%</span>
+            </div>
+          </div>
+
+          {students.length > 0 && (
+            <div className="mt-5 overflow-hidden rounded-xl border border-slate-100">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-100 text-left text-xs uppercase tracking-wide text-slate-500">
+                    <th className="px-4 py-2 font-medium">Student</th>
+                    <th className="px-4 py-2 font-medium">Rate</th>
+                    <th className="px-4 py-2 font-medium">Lessons/wk</th>
+                    <th className="px-4 py-2 text-right font-medium">
+                      Monthly take-home
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {students.map((student) => {
+                    const bd = calculateStudentIncome(
+                      student.hourly_fee,
+                      student.lessons_per_week,
+                    );
+                    return (
+                      <tr key={student.id} className="hover:bg-slate-50">
+                        <td className="px-4 py-2 font-medium text-slate-900">
+                          <Link
+                            href={`/students/${student.id}`}
+                            className="hover:text-indigo-600 hover:underline"
+                          >
+                            {student.name}
+                          </Link>
+                        </td>
+                        <td className="px-4 py-2 tabular-nums text-slate-600">
+                          {formatHourlyFee(student.hourly_fee)}
+                        </td>
+                        <td className="px-4 py-2 tabular-nums text-slate-600">
+                          {student.lessons_per_week}
+                        </td>
+                        <td className="px-4 py-2 text-right tabular-nums font-semibold text-emerald-700">
+                          {formatCurrencyPrecise(bd.monthlyNet)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
 
         {/* ---- Preply Review Tracker ---- */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-start justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900">
-                Preply Review Tracker
-              </h2>
-              <p className="mt-1 text-sm text-slate-500">
-                Click a tile to filter the list below.
-              </p>
-            </div>
+        <section
+          id="preply-tracker"
+          className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        >
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Preply Review Tracker
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Click a tile to filter the list below.
+            </p>
           </div>
 
           <div className="mt-4 grid grid-cols-3 gap-3">
@@ -259,34 +267,29 @@ export default async function DashboardPage({
               const selected = statusFilter === s;
               // Clicking the selected tile again clears the filter.
               const href = selected
-                ? "/dashboard"
+                ? "/dashboard#preply-tracker"
                 : `/dashboard?status=${encodeURIComponent(s)}#preply-tracker`;
               return (
                 <Link
                   key={s}
                   href={href}
                   aria-pressed={selected}
-                  className={`group relative rounded-xl bg-gradient-to-br p-3 text-center text-white shadow-sm transition ${REVIEW_TONE[s]} ${
+                  className={`rounded-xl p-3 text-center transition ${REVIEW_TONE[s]} ${
                     selected
-                      ? "ring-2 ring-white ring-offset-2 ring-offset-white brightness-110"
-                      : "hover:brightness-110"
+                      ? "ring-2 ring-indigo-500 ring-offset-2"
+                      : "hover:brightness-95"
                   }`}
                 >
                   <div className="text-2xl font-bold">{reviewCounts[s]}</div>
-                  <div className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-white/90">
+                  <div className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide">
                     {s}
                   </div>
-                  {selected && (
-                    <span className="absolute -top-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-white text-[10px] font-bold text-slate-700 shadow ring-1 ring-slate-200">
-                      ✓
-                    </span>
-                  )}
                 </Link>
               );
             })}
           </div>
 
-          <div id="preply-tracker" className="mt-4 flex items-center justify-between text-xs">
+          <div className="mt-4 flex items-center justify-between text-xs">
             <span className="text-slate-500">
               {statusFilter
                 ? `Showing ${trackerList.length} “${statusFilter}” student${trackerList.length === 1 ? "" : "s"}`
@@ -304,12 +307,12 @@ export default async function DashboardPage({
 
           <div className="mt-3">
             {trackerList.length === 0 ? (
-              <p className="rounded-lg bg-emerald-50 px-3 py-3 text-sm text-emerald-700 ring-1 ring-inset ring-emerald-100">
+              <p className="rounded-lg bg-emerald-50 px-3 py-3 text-sm text-emerald-700">
                 {statusFilter === "Reviewed"
                   ? "No reviews yet — keep asking!"
                   : statusFilter
                     ? `No students with “${statusFilter}”.`
-                    : "All caught up — every student has been reviewed. ✨"}
+                    : "All caught up — every student has been reviewed."}
               </p>
             ) : (
               <ul className="divide-y divide-slate-100">
@@ -346,7 +349,7 @@ export default async function DashboardPage({
                             <input type="hidden" name="status" value={next} />
                             <button
                               type="submit"
-                              className="rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:shadow-md hover:brightness-110"
+                              className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-indigo-700"
                             >
                               Mark {next}
                             </button>
@@ -363,7 +366,10 @@ export default async function DashboardPage({
       </div>
 
       {/* ---- Master Roster ---- */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section
+        id="roster"
+        className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+      >
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-slate-900">
@@ -375,7 +381,7 @@ export default async function DashboardPage({
           </div>
           <Link
             href="/students/new"
-            className="rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition hover:shadow-md hover:brightness-110"
+            className="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
           >
             + Add student
           </Link>
@@ -418,7 +424,7 @@ export default async function DashboardPage({
                   return (
                     <tr
                       key={student.id}
-                      className="border-b border-slate-100 last:border-0 transition hover:bg-indigo-50/40"
+                      className="border-b border-slate-100 last:border-0 transition hover:bg-slate-50"
                     >
                       <td className="py-2.5 pr-4">
                         <Link
@@ -509,7 +515,7 @@ export default async function DashboardPage({
                   <input type="hidden" name="id" value={student.id} />
                   <button
                     type="submit"
-                    className="rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:shadow-md hover:brightness-110"
+                    className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-700"
                   >
                     Restore
                   </button>
@@ -526,32 +532,38 @@ export default async function DashboardPage({
 // ---------- presentational bits ----------
 
 function KpiCard({
+  href,
   label,
   value,
   sub,
   tone,
+  chip,
   icon,
 }: {
+  href: string;
   label: string;
   value: string;
   sub?: string;
   tone: string;
+  chip: string;
   icon: React.ReactNode;
 }) {
   return (
-    <div
-      className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${tone} p-5 text-white shadow-lg`}
+    <Link
+      href={href}
+      className="block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
     >
-      <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
-      <div className="relative flex items-start justify-between">
+      <div className="flex items-start justify-between">
         <div>
-          <div className="text-xs font-semibold uppercase tracking-wide text-white/80">
+          <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">
             {label}
           </div>
-          <div className="mt-2 text-3xl font-bold tabular-nums">{value}</div>
-          {sub && <div className="mt-1 text-xs text-white/80">{sub}</div>}
+          <div className={`mt-2 text-3xl font-bold tabular-nums ${tone}`}>
+            {value}
+          </div>
+          {sub && <div className="mt-1 text-xs text-slate-400">{sub}</div>}
         </div>
-        <div className="rounded-lg bg-white/15 p-2 ring-1 ring-inset ring-white/20">
+        <div className={`rounded-lg p-2 ${chip} ${tone}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -564,7 +576,7 @@ function KpiCard({
           </svg>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -572,30 +584,20 @@ function IncomeStat({
   label,
   value,
   caption,
-  emphasis,
+  tone,
 }: {
   label: string;
   value: string;
   caption: string;
-  emphasis: "soft" | "strong";
+  tone: string;
 }) {
-  const container =
-    emphasis === "strong"
-      ? "bg-white text-slate-900 shadow-lg"
-      : "bg-white/10 text-white ring-1 ring-inset ring-white/20";
-  const labelClass =
-    emphasis === "strong" ? "text-slate-500" : "text-white/70";
-  const captionClass =
-    emphasis === "strong" ? "text-slate-500" : "text-white/60";
   return (
-    <div className={`rounded-xl px-4 py-3 ${container}`}>
-      <div
-        className={`text-[11px] font-semibold uppercase tracking-wide ${labelClass}`}
-      >
+    <div className={`rounded-xl px-4 py-3 ${tone}`}>
+      <div className="text-[11px] font-semibold uppercase tracking-wide opacity-70">
         {label}
       </div>
       <div className="mt-1 text-2xl font-bold tabular-nums">{value}</div>
-      <div className={`text-xs ${captionClass}`}>{caption}</div>
+      <div className="text-xs opacity-70">{caption}</div>
     </div>
   );
 }

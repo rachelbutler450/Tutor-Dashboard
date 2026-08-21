@@ -12,7 +12,7 @@ export default function NewStudentPage() {
         >
           ← Back to dashboard
         </Link>
-        <h1 className="mt-2 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
+        <h1 className="mt-2 text-2xl font-semibold text-slate-900">
           Add student
         </h1>
       </div>

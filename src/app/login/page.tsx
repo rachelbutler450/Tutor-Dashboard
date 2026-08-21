@@ -25,7 +25,7 @@ export default function LoginPage() {
     <main className="flex flex-1 items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-pink-500 text-white shadow-lg">
+          <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-indigo-600 text-white shadow-sm">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -41,7 +41,7 @@ export default function LoginPage() {
               />
             </svg>
           </div>
-          <h1 className="bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
+          <h1 className="text-2xl font-semibold text-slate-900">
             Tutor Dashboard
           </h1>
           <p className="mt-1 text-sm text-slate-500">
@@ -49,7 +49,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-6 grid grid-cols-2 gap-1 rounded-lg bg-slate-100 p-1">
             <button
               type="button"
@@ -114,7 +114,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loginPending}
-                className="w-full rounded-lg bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:shadow-lg hover:brightness-110 disabled:opacity-60"
+                className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-60"
               >
                 {loginPending ? "Signing in…" : "Sign in"}
               </button>
@@ -175,7 +175,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={signupPending}
-                className="w-full rounded-lg bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:shadow-lg hover:brightness-110 disabled:opacity-60"
+                className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-60"
               >
                 {signupPending ? "Creating account…" : "Create account"}
               </button>

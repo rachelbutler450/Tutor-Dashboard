@@ -51,7 +51,7 @@ export default async function StudentDetailPage({
             ← Back to dashboard
           </Link>
           <div className="mt-2 flex flex-wrap items-center gap-3">
-            <h1 className="bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
+            <h1 className="text-2xl font-semibold text-slate-900">
               {student.name}
             </h1>
             <ReviewStatusBadge status={student.review_status} />
@@ -74,44 +74,41 @@ export default async function StudentDetailPage({
       </div>
 
       {/* ---- Per-student income card ---- */}
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-6 text-white shadow-xl">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-pink-400/20 blur-3xl" />
-
-        <div className="relative">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h2 className="text-lg font-semibold">Estimated Monthly Income</h2>
-              <p className="mt-1 text-sm text-white/70">
-                {formatHourlyFee(student.hourly_fee)} ×{" "}
-                {student.lessons_per_week} lessons/wk × ~4.33 weeks
-              </p>
-            </div>
-            <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 ring-1 ring-inset ring-white/25">
-              Preply {commissionPct}% commission
-            </span>
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Estimated Monthly Income
+            </h2>
+            <p className="mt-1 text-sm text-slate-500">
+              {formatHourlyFee(student.hourly_fee)} ×{" "}
+              {student.lessons_per_week} lessons/wk × ~4.33 weeks
+            </p>
           </div>
+          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+            Preply {commissionPct}% commission
+          </span>
+        </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <MiniStat
-              label="Gross"
-              value={formatCurrencyPrecise(income.monthlyGross)}
-              caption="Before commission"
-              emphasis="soft"
-            />
-            <MiniStat
-              label={`Preply cut (${commissionPct}%)`}
-              value={`−${formatCurrencyPrecise(income.commission)}`}
-              caption="Deducted"
-              emphasis="soft"
-            />
-            <MiniStat
-              label={`Your take-home (${takeHomePct}%)`}
-              value={formatCurrencyPrecise(income.monthlyNet)}
-              caption="What you receive"
-              emphasis="strong"
-            />
-          </div>
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <MiniStat
+            label="Gross"
+            value={formatCurrencyPrecise(income.monthlyGross)}
+            caption="Before commission"
+            tone="bg-slate-50 text-slate-900"
+          />
+          <MiniStat
+            label={`Preply cut (${commissionPct}%)`}
+            value={`−${formatCurrencyPrecise(income.commission)}`}
+            caption="Deducted"
+            tone="bg-rose-50 text-rose-700"
+          />
+          <MiniStat
+            label={`Your take-home (${takeHomePct}%)`}
+            value={formatCurrencyPrecise(income.monthlyNet)}
+            caption="What you receive"
+            tone="bg-emerald-50 text-emerald-700"
+          />
         </div>
       </section>
 
@@ -134,30 +131,20 @@ function MiniStat({
   label,
   value,
   caption,
-  emphasis,
+  tone,
 }: {
   label: string;
   value: string;
   caption: string;
-  emphasis: "soft" | "strong";
+  tone: string;
 }) {
-  const container =
-    emphasis === "strong"
-      ? "bg-white text-slate-900 shadow-lg"
-      : "bg-white/10 text-white ring-1 ring-inset ring-white/20";
-  const labelClass =
-    emphasis === "strong" ? "text-slate-500" : "text-white/70";
-  const captionClass =
-    emphasis === "strong" ? "text-slate-500" : "text-white/60";
   return (
-    <div className={`rounded-xl px-4 py-3 ${container}`}>
-      <div
-        className={`text-[11px] font-semibold uppercase tracking-wide ${labelClass}`}
-      >
+    <div className={`rounded-xl px-4 py-3 ${tone}`}>
+      <div className="text-[11px] font-semibold uppercase tracking-wide opacity-70">
         {label}
       </div>
       <div className="mt-1 text-2xl font-bold tabular-nums">{value}</div>
-      <div className={`text-xs ${captionClass}`}>{caption}</div>
+      <div className="text-xs opacity-70">{caption}</div>
     </div>
   );
 }
