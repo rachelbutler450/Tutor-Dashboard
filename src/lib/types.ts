@@ -26,6 +26,7 @@ export interface Student {
   lessons_per_week: number;
   preply_link: string | null;
   review_status: ReviewStatus;
+  deleted_at: string | null;
   created_at: string;
   updated_at: string;
 }
