@@ -25,15 +25,31 @@ export default function LoginPage() {
     <main className="flex flex-1 items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold tracking-tight">
-            <span className="gradient-title">Tutor Dashboard</span>
+          <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-pink-500 text-white shadow-lg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"
+              />
+            </svg>
+          </div>
+          <h1 className="bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
+            Tutor Dashboard
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
-            Manage your students, Preply reviews, and monthly income.
+          <p className="mt-1 text-sm text-slate-500">
+            Manage your students, weekly load, and Preply income.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/60 bg-white/80 p-6 shadow-xl shadow-violet-500/10 backdrop-blur">
+        <div className="rounded-2xl border border-white/60 bg-white/80 p-6 shadow-xl backdrop-blur">
           <div className="mb-6 grid grid-cols-2 gap-1 rounded-lg bg-slate-100 p-1">
             <button
               type="button"
@@ -98,7 +114,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loginPending}
-                className="btn-primary w-full"
+                className="w-full rounded-lg bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:shadow-lg hover:brightness-110 disabled:opacity-60"
               >
                 {loginPending ? "Signing in…" : "Sign in"}
               </button>
@@ -159,7 +175,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={signupPending}
-                className="btn-primary w-full"
+                className="w-full rounded-lg bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:shadow-lg hover:brightness-110 disabled:opacity-60"
               >
                 {signupPending ? "Creating account…" : "Create account"}
               </button>
