@@ -7,15 +7,11 @@ import {
   updateStudent,
   deleteStudent,
 } from "@/app/(app)/students/actions";
+import { formatCurrencyPrecise, formatHourlyFee } from "@/lib/format";
 import {
-  calculateStudentIncome,
   PREPLY_COMMISSION_RATE,
+  calculateStudentIncome,
 } from "@/lib/income";
-import {
-  formatCurrency,
-  formatCurrencyPrecise,
-  formatHourlyFee,
-} from "@/lib/format";
 import type { Student } from "@/lib/types";
 
 export default async function StudentDetailPage({
@@ -26,17 +22,17 @@ export default async function StudentDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const { data: studentData } = await supabase
+  const { data: student } = await supabase
     .from("students")
     .select("*")
     .eq("id", id)
+    .is("deleted_at", null)
     .maybeSingle<Student>();
 
-  if (!studentData) {
+  if (!student) {
     notFound();
   }
 
-  const student = studentData;
   const income = calculateStudentIncome(
     student.hourly_fee,
     student.lessons_per_week,
@@ -46,8 +42,7 @@ export default async function StudentDetailPage({
 
   return (
     <div className="space-y-8">
-      {/* Page header */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <Link
             href="/dashboard"
@@ -55,20 +50,17 @@ export default async function StudentDetailPage({
           >
             ← Back to dashboard
           </Link>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            <span className="gradient-title">{student.name}</span>
-          </h1>
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-600">
-            {student.grade_year && <span>{student.grade_year}</span>}
-            {student.grade_year && student.curriculum && (
-              <span className="text-slate-300">·</span>
-            )}
-            {student.curriculum && <span>{student.curriculum}</span>}
-            {(student.grade_year || student.curriculum) && (
-              <span className="text-slate-300">·</span>
-            )}
+          <div className="mt-2 flex flex-wrap items-center gap-3">
+            <h1 className="bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
+              {student.name}
+            </h1>
             <ReviewStatusBadge status={student.review_status} />
           </div>
+          <p className="mt-1 text-sm text-slate-500">
+            {[student.grade_year, student.curriculum]
+              .filter(Boolean)
+              .join(" · ") || "No grade or curriculum set yet"}
+          </p>
         </div>
         <form action={deleteStudent}>
           <input type="hidden" name="id" value={student.id} />
@@ -81,116 +73,91 @@ export default async function StudentDetailPage({
         </form>
       </div>
 
-      {/* Estimated Monthly Income — emerald, distinct */}
-      <section className="overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50/60 shadow-sm">
-        <div className="flex items-center gap-4 border-b border-emerald-100 px-6 py-5">
-          <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
-            <DollarIcon />
-          </span>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
-              Estimated Monthly Income · {student.name}
-            </p>
-            <p className="mt-0.5 text-3xl font-bold tracking-tight text-emerald-950 sm:text-4xl">
-              {formatCurrency(income.monthlyNet)}
-            </p>
-            <p className="mt-1 text-xs text-emerald-800/80">
-              {formatHourlyFee(student.hourly_fee)} ·{" "}
-              {student.lessons_per_week} lesson
-              {student.lessons_per_week === 1 ? "" : "s"} / week
-            </p>
-          </div>
-        </div>
+      {/* ---- Per-student income card ---- */}
+      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-6 text-white shadow-xl">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full bg-pink-400/20 blur-3xl" />
 
-        <div className="grid grid-cols-1 gap-3 p-6 sm:grid-cols-3">
-          <IncomeStat
-            label="Gross"
-            value={formatCurrencyPrecise(income.monthlyGross)}
-          />
-          <IncomeStat
-            label={`Preply cut (${commissionPct}%)`}
-            value={`- ${formatCurrencyPrecise(income.commission)}`}
-          />
-          <IncomeStat
-            label={`Your take-home (${takeHomePct}%)`}
-            value={formatCurrencyPrecise(income.monthlyNet)}
-            highlight
-          />
+        <div className="relative">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="text-lg font-semibold">Estimated Monthly Income</h2>
+              <p className="mt-1 text-sm text-white/70">
+                {formatHourlyFee(student.hourly_fee)} ×{" "}
+                {student.lessons_per_week} lessons/wk × ~4.33 weeks
+              </p>
+            </div>
+            <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 ring-1 ring-inset ring-white/25">
+              Preply {commissionPct}% commission
+            </span>
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <MiniStat
+              label="Gross"
+              value={formatCurrencyPrecise(income.monthlyGross)}
+              caption="Before commission"
+              emphasis="soft"
+            />
+            <MiniStat
+              label={`Preply cut (${commissionPct}%)`}
+              value={`−${formatCurrencyPrecise(income.commission)}`}
+              caption="Deducted"
+              emphasis="soft"
+            />
+            <MiniStat
+              label={`Your take-home (${takeHomePct}%)`}
+              value={formatCurrencyPrecise(income.monthlyNet)}
+              caption="What you receive"
+              emphasis="strong"
+            />
+          </div>
         </div>
       </section>
 
-      {/* Editable details */}
-      <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-100 px-6 py-4">
-          <h2 className="text-lg font-semibold text-slate-900">
-            Student details
-          </h2>
-          <p className="text-xs text-slate-500">
-            Update plan, contact info, and Preply link.
-          </p>
-        </div>
-        <div className="p-6">
-          <StudentForm
-            action={updateStudent}
-            student={student}
-            submitLabel="Save changes"
-          />
-        </div>
+      {/* ---- Editable details ---- */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">
+          Student details
+        </h2>
+        <StudentForm
+          action={updateStudent}
+          student={student}
+          submitLabel="Save changes"
+        />
       </section>
     </div>
   );
 }
 
-function IncomeStat({
+function MiniStat({
   label,
   value,
-  highlight = false,
+  caption,
+  emphasis,
 }: {
   label: string;
   value: string;
-  highlight?: boolean;
+  caption: string;
+  emphasis: "soft" | "strong";
 }) {
+  const container =
+    emphasis === "strong"
+      ? "bg-white text-slate-900 shadow-lg"
+      : "bg-white/10 text-white ring-1 ring-inset ring-white/20";
+  const labelClass =
+    emphasis === "strong" ? "text-slate-500" : "text-white/70";
+  const captionClass =
+    emphasis === "strong" ? "text-slate-500" : "text-white/60";
   return (
-    <div
-      className={
-        highlight
-          ? "rounded-xl bg-emerald-600 p-4 text-white shadow-sm"
-          : "rounded-xl border border-emerald-100 bg-white p-4"
-      }
-    >
+    <div className={`rounded-xl px-4 py-3 ${container}`}>
       <div
-        className={`text-xs font-semibold uppercase tracking-wide ${
-          highlight ? "text-emerald-50" : "text-emerald-700"
-        }`}
+        className={`text-[11px] font-semibold uppercase tracking-wide ${labelClass}`}
       >
         {label}
       </div>
-      <div
-        className={`mt-1 text-2xl font-bold tabular-nums ${
-          highlight ? "text-white" : "text-slate-900"
-        }`}
-      >
-        {value}
-      </div>
+      <div className="mt-1 text-2xl font-bold tabular-nums">{value}</div>
+      <div className={`text-xs ${captionClass}`}>{caption}</div>
     </div>
-  );
-}
-
-function DollarIcon() {
-  return (
-    <svg
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.75}
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 6v12m4-9.5c0-1.24-1.79-2.25-4-2.25s-4 1.01-4 2.25 1.79 2.25 4 2.25 4 1.01 4 2.25-1.79 2.25-4 2.25-4-1.01-4-2.25"
-      />
-    </svg>
   );
 }

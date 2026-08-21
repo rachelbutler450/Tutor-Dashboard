@@ -28,10 +28,13 @@ create table public.students (
   lessons_per_week smallint    not null default 1 check (lessons_per_week >= 0),
   preply_link      text,
   review_status    public.review_status not null default 'Not Asked',
+  deleted_at       timestamptz,
   created_at       timestamptz not null default now(),
   updated_at       timestamptz not null default now()
 );
 create index students_tutor_id_idx on public.students (tutor_id);
+-- Fast lookup of active (non-deleted) students per tutor.
+create index students_active_idx on public.students (tutor_id) where deleted_at is null;
 alter table public.students enable row level security;
 create policy "Tutors can view their own students"   on public.students for select using (auth.uid() = tutor_id);
 create policy "Tutors can insert their own students" on public.students for insert with check (auth.uid() = tutor_id);

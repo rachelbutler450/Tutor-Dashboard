@@ -133,6 +133,11 @@ export async function updateReviewStatus(formData: FormData) {
   revalidatePath(`/students/${id}`);
 }
 
+/**
+ * Soft-delete: marks the student as deleted so it disappears from the roster,
+ * income totals, and Preply tracker, but stays recoverable from the "Recently
+ * deleted" section on the dashboard.
+ */
 export async function deleteStudent(formData: FormData) {
   const supabase = await createClient();
   const {
@@ -145,7 +150,7 @@ export async function deleteStudent(formData: FormData) {
 
   await supabase
     .from("students")
-    .delete()
+    .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("tutor_id", user.id);
 
@@ -153,3 +158,23 @@ export async function deleteStudent(formData: FormData) {
   redirect("/dashboard");
 }
 
+/** Restore a previously soft-deleted student. */
+export async function restoreStudent(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const id = text(formData, "id");
+  if (!id) return;
+
+  await supabase
+    .from("students")
+    .update({ deleted_at: null })
+    .eq("id", id)
+    .eq("tutor_id", user.id);
+
+  revalidatePath("/dashboard");
+  revalidatePath(`/students/${id}`);
+}
