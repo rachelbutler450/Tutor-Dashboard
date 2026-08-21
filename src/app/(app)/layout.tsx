@@ -30,16 +30,14 @@ export default async function AppLayout({
 
   return (
     <div className="flex min-h-full flex-col">
-      <header className="relative overflow-hidden bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 text-white shadow-lg">
-        <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
-        <div className="pointer-events-none absolute -left-16 -bottom-24 h-56 w-56 rounded-full bg-pink-300/20 blur-3xl" />
-        <nav className="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
+      <header className="border-b border-slate-200 bg-white">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5">
           <div className="flex items-center gap-6">
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 text-base font-bold tracking-tight"
+              className="flex items-center gap-2 text-base font-semibold text-slate-900"
             >
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/15 ring-1 ring-inset ring-white/25">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-indigo-600 text-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -63,8 +61,8 @@ export default async function AppLayout({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="hidden items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm text-white/90 ring-1 ring-inset ring-white/20 sm:flex">
-              <span className="grid h-6 w-6 place-items-center rounded-full bg-white/20 text-xs font-bold">
+            <div className="hidden items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700 sm:flex">
+              <span className="grid h-6 w-6 place-items-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700">
                 {initial}
               </span>
               <span className="max-w-[10rem] truncate">{displayName}</span>
@@ -72,7 +70,7 @@ export default async function AppLayout({
             <form action={signOut}>
               <button
                 type="submit"
-                className="rounded-lg bg-white/15 px-3 py-1.5 text-sm font-medium text-white ring-1 ring-inset ring-white/25 transition hover:bg-white/25"
+                className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
               >
                 Sign out
               </button>
@@ -97,7 +95,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className="rounded-lg px-3 py-1.5 text-white/85 transition hover:bg-white/10 hover:text-white"
+      className="rounded-lg px-3 py-1.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
     >
       {children}
     </Link>

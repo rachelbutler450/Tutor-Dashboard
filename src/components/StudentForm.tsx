@@ -177,7 +177,7 @@ export default function StudentForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:shadow-lg hover:brightness-110 disabled:opacity-60"
+        className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-60"
       >
         {pending ? "Saving…" : submitLabel}
       </button>

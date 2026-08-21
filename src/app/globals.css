@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f3ff; /* light violet */
+  --background: #f8fafc; /* slate-50 */
   --foreground: #0f172a;
 }
 
@@ -13,15 +13,11 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Soft, premium background wash — a violet → sky gradient that stays fixed
-   while the page scrolls, so cards float over a subtle color field. */
+/* Clean, professional background — a very light neutral wash, not a bold
+   colored gradient. */
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(1200px 600px at 100% -10%, rgba(236, 72, 153, 0.12), transparent 60%),
-    radial-gradient(900px 500px at -10% 0%, rgba(99, 102, 241, 0.18), transparent 60%),
-    linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
-  background-attachment: fixed;
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
 }
@@ -43,9 +39,21 @@ body {
 
 .input:focus {
   border-color: #6366f1; /* indigo-500 */
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
 .input::placeholder {
   color: #94a3b8; /* slate-400 */
+}
+
+/* When a KPI card or filter link jumps to a section on the same page,
+   give the landed-on section a brief highlight so it's obvious something
+   happened — without navigating away from the dashboard. */
+section[id] {
+  scroll-margin-top: 1.5rem;
+  transition: box-shadow 0.2s ease;
+}
+
+section[id]:target {
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.35);
 }
