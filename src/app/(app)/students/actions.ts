@@ -143,11 +143,19 @@ export async function updateReviewStatus(formData: FormData) {
 }
 
 /**
- * Soft-delete: marks the student as deleted so it disappears from the roster,
- * income totals, and Preply tracker, but stays recoverable from the "Recently
- * deleted" section on the /students page.
+ * Soft-delete: marks the student as deleted so it disappears from the
+ * roster, weekly lessons, income totals, and Preply tracker (every list
+ * page filters `deleted_at IS NULL`), but stays recoverable from the
+ * "Recently deleted" section on the /students page. No other column is
+ * touched, so a later restore brings back the row exactly as it was.
+ *
+ * Returns a FormState so the confirmation dialog can surface a failure
+ * (e.g. an un-applied migration) instead of silently doing nothing.
  */
-export async function deleteStudent(formData: FormData) {
+export async function deleteStudent(
+  _prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -155,13 +163,23 @@ export async function deleteStudent(formData: FormData) {
   if (!user) redirect("/login");
 
   const id = text(formData, "id");
-  if (!id) return;
+  if (!id) return { error: "Missing student id." };
 
-  await supabase
+  const { data, error } = await supabase
     .from("students")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
-    .eq("tutor_id", user.id);
+    .eq("tutor_id", user.id)
+    .select("id");
+
+  if (error) {
+    return { error: error.message };
+  }
+  if (!data || data.length === 0) {
+    return {
+      error: "Student not found, or you don't have permission to delete it.",
+    };
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/students");
@@ -171,8 +189,15 @@ export async function deleteStudent(formData: FormData) {
   redirect("/students");
 }
 
-/** Restore a previously soft-deleted student. */
-export async function restoreStudent(formData: FormData) {
+/**
+ * Restore a previously soft-deleted student by clearing deleted_at. Every
+ * other column is untouched by delete, so this brings the row back exactly
+ * as it was — nothing is regenerated or approximated.
+ */
+export async function restoreStudent(
+  _prevState: FormState,
+  formData: FormData,
+): Promise<FormState> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -180,13 +205,23 @@ export async function restoreStudent(formData: FormData) {
   if (!user) redirect("/login");
 
   const id = text(formData, "id");
-  if (!id) return;
+  if (!id) return { error: "Missing student id." };
 
-  await supabase
+  const { data, error } = await supabase
     .from("students")
     .update({ deleted_at: null })
     .eq("id", id)
-    .eq("tutor_id", user.id);
+    .eq("tutor_id", user.id)
+    .select("id");
+
+  if (error) {
+    return { error: error.message };
+  }
+  if (!data || data.length === 0) {
+    return {
+      error: "Student not found, or you don't have permission to restore it.",
+    };
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/students");
@@ -194,4 +229,5 @@ export async function restoreStudent(formData: FormData) {
   revalidatePath("/income");
   revalidatePath("/reviews");
   revalidatePath(`/students/${id}`);
+  return { success: true };
 }
