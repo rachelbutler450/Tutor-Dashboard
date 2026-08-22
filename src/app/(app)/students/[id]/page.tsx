@@ -3,10 +3,8 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import StudentForm from "@/components/StudentForm";
 import { ReviewStatusBadge } from "@/components/Badges";
-import {
-  updateStudent,
-  deleteStudent,
-} from "@/app/(app)/students/actions";
+import { DeleteStudentDialog } from "@/components/DeleteStudentDialog";
+import { updateStudent } from "@/app/(app)/students/actions";
 import { formatCurrencyPrecise, formatHourlyFee } from "@/lib/format";
 import {
   PREPLY_COMMISSION_RATE,
@@ -62,15 +60,7 @@ export default async function StudentDetailPage({
               .join(" · ") || "No grade or curriculum set yet"}
           </p>
         </div>
-        <form action={deleteStudent}>
-          <input type="hidden" name="id" value={student.id} />
-          <button
-            type="submit"
-            className="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
-          >
-            Delete student
-          </button>
-        </form>
+        <DeleteStudentDialog studentId={student.id} studentName={student.name} />
       </div>
 
       {/* ---- Per-student income card ---- */}
