@@ -74,6 +74,10 @@ export async function createStudent(
   }
 
   revalidatePath("/dashboard");
+  revalidatePath("/students");
+  revalidatePath("/lessons");
+  revalidatePath("/income");
+  revalidatePath("/reviews");
   redirect(`/students/${data.id}`);
 }
 
@@ -106,6 +110,10 @@ export async function updateStudent(
   }
 
   revalidatePath("/dashboard");
+  revalidatePath("/students");
+  revalidatePath("/lessons");
+  revalidatePath("/income");
+  revalidatePath("/reviews");
   revalidatePath(`/students/${id}`);
   return { success: true };
 }
@@ -130,13 +138,14 @@ export async function updateReviewStatus(formData: FormData) {
     .eq("tutor_id", user.id);
 
   revalidatePath("/dashboard");
+  revalidatePath("/reviews");
   revalidatePath(`/students/${id}`);
 }
 
 /**
  * Soft-delete: marks the student as deleted so it disappears from the roster,
  * income totals, and Preply tracker, but stays recoverable from the "Recently
- * deleted" section on the dashboard.
+ * deleted" section on the /students page.
  */
 export async function deleteStudent(formData: FormData) {
   const supabase = await createClient();
@@ -155,7 +164,11 @@ export async function deleteStudent(formData: FormData) {
     .eq("tutor_id", user.id);
 
   revalidatePath("/dashboard");
-  redirect("/dashboard");
+  revalidatePath("/students");
+  revalidatePath("/lessons");
+  revalidatePath("/income");
+  revalidatePath("/reviews");
+  redirect("/students");
 }
 
 /** Restore a previously soft-deleted student. */
@@ -176,5 +189,9 @@ export async function restoreStudent(formData: FormData) {
     .eq("tutor_id", user.id);
 
   revalidatePath("/dashboard");
+  revalidatePath("/students");
+  revalidatePath("/lessons");
+  revalidatePath("/income");
+  revalidatePath("/reviews");
   revalidatePath(`/students/${id}`);
 }
