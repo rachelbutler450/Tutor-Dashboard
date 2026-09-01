@@ -34,13 +34,16 @@ export default async function StudentsPage({
 
   const allStudents = (data ?? []) as Student[];
 
-  // Distinct hourly fees that actually exist across this tutor's students
-  // (not a hardcoded range), sorted ascending.
+  // Distinct WHOLE-DOLLAR hourly fees that actually exist across this
+  // tutor's students (not a hardcoded range, not rounded/bucketed) — fees
+  // with cents (e.g. $6.56) are simply excluded from the option list.
+  // Those students still appear normally when no filter is applied; they
+  // just aren't selectable via this control.
   const feeOptions = Array.from(
     new Set(
       allStudents
         .map((s) => s.hourly_fee)
-        .filter((f): f is number => f !== null),
+        .filter((f): f is number => f !== null && Number.isInteger(f)),
     ),
   ).sort((a, b) => a - b);
 
