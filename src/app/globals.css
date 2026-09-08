@@ -57,3 +57,54 @@ section[id] {
 section[id]:target {
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.35);
 }
+
+/* Dual-handle fee range slider (two overlapping native range inputs; only
+   each thumb is interactive, so both handles stay independently
+   draggable even though the inputs are stacked on top of one another). */
+.range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+  margin: 0;
+}
+
+.range-thumb:focus {
+  outline: none;
+}
+
+.range-thumb::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  background: transparent;
+  height: 100%;
+}
+
+.range-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 0;
+  border-radius: 9999px;
+  background: #4f46e5; /* indigo-600 */
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
+  cursor: pointer;
+}
+
+.range-thumb::-moz-range-track {
+  background: transparent;
+  height: 100%;
+  border: none;
+}
+
+.range-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: #4f46e5;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
+  cursor: pointer;
+}
